@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <classPathEntry location="./mysql-connector-java-5.1.18.jar"/>
+    <!-- defaultModelType表示只生成一个实体类 -->
+    <context id="Mysql2Tables" defaultModelType="flat">
+        <!-- 属性相关配置 -->
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <!-- 注释相关配置 -->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 数据连接相关配置 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://39.108.123.89:3306/library" userId="root"
+                        password="cs.swust">
+        </jdbcConnection>
+
+        <!-- JDBC类型和Java类型转换相关配置 -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="true"/>
+        </javaTypeResolver>
+
+        <!-- 实体类相关配置 -->
+        <javaModelGenerator targetProject="src" targetPackage="com.ysf.csTest.entity">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- xml相关配置 -->
+        <sqlMapGenerator targetProject="src" targetPackage="com.ysf.csTest.mappers">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- dao接口相关配置 -->
+        <javaClientGenerator targetPackage="com.ysf.csTest.dao" type="XMLMAPPER"
+                             targetProject="src">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- table -->
+        <table schema="library" tableName="user_info" domainObjectName="UserInfo"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+    </context>
+</generatorConfiguration>
+
