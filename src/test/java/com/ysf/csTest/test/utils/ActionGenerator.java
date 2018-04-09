@@ -1,6 +1,5 @@
 package com.ysf.csTest.test.utils;
 
-import com.ysf.csTest.utils.FileUtil;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
