@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ysf.csTest.dao.UserInfoDao">
+    <select id="selectByCondition" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_info
+        WHERE 1 = 1
+        <if test="record.id != null">
+            AND
+            id = #{record.id}
+        </if>
+        <if test="record.username != null">
+            AND
+            username = #{record.username}
+        </if>
+        <if test="record.password != null">
+            AND
+            password = #{record.password}
+        </if>
+        <if test="record.createTime != null">
+            AND
+            create_time = #{record.createTime}
+        </if>
+        <if test="record.modifyTime != null">
+            AND
+            modify_time = #{record.modifyTime}
+        </if>
+
+        <include refid="custom_condition"/>
+        <if test="start != null and rows != null">
+            LIMIT #{start}, #{rows}
+        </if>
+    </select>
+    <select id="selectByConditionGetCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(*)
+        FROM user_info
+        WHERE 1 = 1
+        <if test="record.id != null">
+            AND
+            id = #{record.id}
+        </if>
+        <if test="record.username != null">
+            AND
+            username = #{record.username}
+        </if>
+        <if test="record.password != null">
+            AND
+            password = #{record.password}
+        </if>
+        <if test="record.createTime != null">
+            AND
+            create_time = #{record.createTime}
+        </if>
+        <if test="record.modifyTime != null">
+            AND
+            modify_time = #{record.modifyTime}
+        </if>
+
+        <include refid="custom_condition"/>
+        <if test="start != null and rows != null">
+            LIMIT #{start}, #{rows}
+        </if>
+    </select>
+    <delete id="deleteByIdsList" parameterType="java.util.Map">
+        delete from user_info
+        where id in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+    <select id="selectByIdsList" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from user_info
+        where id in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+    <select id="insertBatch" parameterType="java.util.Map">
+        insert into user_info
+        (username, password, create_time, modify_time) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.username}, #{item.password}, #{item.createTime}, #{item.modifyTime})
+        </foreach>
+    </select>
+</mapper>

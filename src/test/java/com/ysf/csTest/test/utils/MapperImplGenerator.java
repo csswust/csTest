@@ -1,6 +1,5 @@
 package com.ysf.csTest.test.utils;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public class MapperImplGenerator {
             if (i != 0) str += ", ";
             str += fieldList.get(i).getColumn();
         }
-        if(model.isBlob()){
+        if (model.isBlob()) {
             List<Field> BlobFieldList = model.getBlobFieldList();
             for (int i = 0; i < BlobFieldList.size(); i++) {
                 str += ", ";
@@ -42,7 +41,7 @@ public class MapperImplGenerator {
             if (i != 0) str += ", ";
             str += "#{item." + fieldList.get(i).getProperty() + "}";
         }
-        if(model.isBlob()){
+        if (model.isBlob()) {
             List<Field> BlobFieldList = model.getBlobFieldList();
             for (int i = 0; i < BlobFieldList.size(); i++) {
                 str += ", ";

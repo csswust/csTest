@@ -1,7 +1,7 @@
 package com.ysf.csTest.common.cache;
 
-import com.ysf.csTest.common.config.SiteKey;
 import com.ysf.csTest.common.config.Config;
+import com.ysf.csTest.common.config.SiteKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
