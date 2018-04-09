@@ -23,12 +23,14 @@ public class Generator {
     public static String modelPath = "E:\\javawork\\csTest\\src\\main\\resources\\mybatis_mappers";
     public static String daoPath = "E:\\javawork\\csTest\\src\\main\\java\\com\\ysf\\csTest\\dao";
     public static String actionPath = "E:\\javawork\\csTest\\src\\main\\java\\com\\ysf\\csTest\\controller";
+    public static String htmlPath = "E:\\javawork\\csTest\\src\\main\\webapp\\index.html";
 
     public static String daoImplPath = daoPath + "/impl";
     public static String xmlImplPath = modelPath + "/impl";
     public static String xmlCustomPath = modelPath + "/custom";
     public static String basePackage = "com.ysf.csTest";
     private static boolean isOver = false;
+
 
     public static void main(String[] args) throws IOException {
         File oldPathFile = new File(modelPath);

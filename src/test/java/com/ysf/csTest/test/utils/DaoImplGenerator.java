@@ -7,7 +7,7 @@ import java.util.Map;
  * Created by 972536780 on 2017/11/20.
  */
 public class DaoImplGenerator {
-    public static void generator(Model model) throws IOException {
+    public static void generator(Model model) {
         Map<String, Object> map = Generator.getTemplateMap(model);
         String typeName = (String) map.get("typeName");
         String dIdProperty = toUpperCaseFirstOne(model.getIdProperty());

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MapperImplGenerator {
-    public static void generator(Model model) throws IOException {
+    public static void generator(Model model) {
         Map<String, Object> map = Generator.getTemplateMap(model);
         map.put("conditionStr", getConditionStr(model));
         map.put("FieldStr", getFieldStr(model));
