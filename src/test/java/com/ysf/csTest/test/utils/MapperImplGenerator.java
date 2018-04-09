@@ -9,124 +9,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by 972536780 on 2018/3/13.
- */
-
-class Field {
-    private String column;
-    private String property;
-    private String jdbcType;
-
-    public String getColumn() {
-        return column;
-    }
-
-    public void setColumn(String column) {
-        this.column = column;
-    }
-
-    public String getProperty() {
-        return property;
-    }
-
-    public void setProperty(String property) {
-        this.property = property;
-    }
-
-    public String getJdbcType() {
-        return jdbcType;
-    }
-
-    public void setJdbcType(String jdbcType) {
-        this.jdbcType = jdbcType;
-    }
-}
-
-class Model {
-    private String namespace;
-    private String tableName;
-    private String type;
-    private String idColumn;
-    private String idProperty;
-    private String idJdbcType;
-    private List<Field> fieldList = new ArrayList<>();
-    private boolean isBlob = false;
-    private List<Field> blobFieldList = new ArrayList<>();
-
-    public String getNamespace() {
-        return namespace;
-    }
-
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
-    }
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getIdColumn() {
-        return idColumn;
-    }
-
-    public void setIdColumn(String idColumn) {
-        this.idColumn = idColumn;
-    }
-
-    public String getIdProperty() {
-        return idProperty;
-    }
-
-    public void setIdProperty(String idProperty) {
-        this.idProperty = idProperty;
-    }
-
-    public String getIdJdbcType() {
-        return idJdbcType;
-    }
-
-    public void setIdJdbcType(String idJdbcType) {
-        this.idJdbcType = idJdbcType;
-    }
-
-    public List<Field> getFieldList() {
-        return fieldList;
-    }
-
-    public void setFieldList(List<Field> fieldList) {
-        this.fieldList = fieldList;
-    }
-
-    public boolean isBlob() {
-        return isBlob;
-    }
-
-    public void setBlob(boolean blob) {
-        isBlob = blob;
-    }
-
-    public List<Field> getBlobFieldList() {
-        return blobFieldList;
-    }
-
-    public void setBlobFieldList(List<Field> blobFieldList) {
-        this.blobFieldList = blobFieldList;
-    }
-}
-
 public class MapperImplGenerator {
     private static String oldPath = "E:\\javawork\\csTest\\src\\main\\resources\\mybatis_mappers";
     private static String newPath = oldPath + "/impl";
@@ -143,8 +25,7 @@ public class MapperImplGenerator {
             if (!judge(newPath + "/" + file.getName())) {
                 continue;
             }
-            Element rootElement = readXml(file.getPath());
-            Model model = getModel(rootElement);
+            Model model = Generator.getModel(newPath + "/" + file.getName());
             System.out.println(JSON.toJSONString(model));
             generator(model, file.getName());
 
@@ -290,66 +171,5 @@ public class MapperImplGenerator {
                 "            AND\n" +
                 "            %s = #{record.%s}\n" +
                 "        </if>\n", pp, cc, pp);
-    }
-
-
-    public static Model getModel(Element rootElement) {
-        Model model = new Model();
-        model.setNamespace(rootElement.attributeValue("namespace"));
-        List<Element> resultMapList = rootElement.elements("resultMap");
-        Element firltMap = resultMapList.get(0);
-        // 设置type
-        model.setType(firltMap.attributeValue("type"));
-        // 设置主键
-        Element id = firltMap.element("id");
-        model.setIdColumn(id.attributeValue("column"));
-        model.setIdProperty(id.attributeValue("property"));
-        model.setIdJdbcType(id.attributeValue("jdbcType"));
-        // 设置字段
-        model.setFieldList(getField(firltMap));
-        if (resultMapList.size() != 1) {
-            model.setBlob(true);
-            model.setBlobFieldList(getField(resultMapList.get(1)));
-        }
-        Element delete = rootElement.element("delete");
-        String text = delete.getText().replaceAll("\n", "");
-        String result = text.split("\\s+")[3];
-        model.setTableName(result);
-        return model;
-    }
-
-    public static List<Field> getField(Element rootElement) {
-        List<Field> fieldList = new ArrayList<>();
-        List<Element> elementList = rootElement.elements("result");
-        for (Element element : elementList) {
-            Field field = new Field();
-            field.setColumn(element.attributeValue("column"));
-            field.setProperty(element.attributeValue("property"));
-            field.setJdbcType(element.attributeValue("jdbcType"));
-            fieldList.add(field);
-        }
-        return fieldList;
-    }
-
-    public static Element readXml(String filePath) {
-        InputStream in = null;
-        Element rootElement = null;
-        try {
-            SAXReader reader = new SAXReader();
-            in = new FileInputStream(new File(filePath));
-            Document doc = reader.read(in);
-            rootElement = doc.getRootElement();
-            System.out.println("XMLUtil.readXml root name:" + rootElement.getName());
-        } catch (Exception e) {
-            System.err.println("XMLUtil.readXml error: " + e);
-            return null;
-        } finally {
-            try {
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return rootElement;
     }
 }

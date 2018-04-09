@@ -1,9 +1,15 @@
 package com.ysf.csTest.test.utils;
 
+import com.ysf.csTest.utils.FileUtil;
+import org.apache.commons.io.FileUtils;
+import org.apache.velocity.app.Velocity;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -12,6 +18,22 @@ import java.util.Scanner;
 public class DaoImplGenerator {
     private static String oldPath = "E:\\javawork\\csTest\\src\\main\\java\\com\\ysf\\csTest\\dao";
     private static String newPath = oldPath + "/impl";
+    private static String basePackage = "com.ysf.csTest";
+
+    public static void generator(Model model) throws IOException {
+        String typeName = model.getTypeClass().getSimpleName();
+        File newFile = new File(newPath + "/" + typeName + "DaoImpl.java");
+        if (newFile.exists()) return;
+        else newFile.createNewFile();
+        Map<String, Object> map = new HashMap<>();
+        map.put("basePackage", basePackage);
+        map.put("typeName", typeName);
+        map.put("model", model);
+        String template = FileUtil.readResource("mapper-template/DaoImplMapper.ftl");
+        String TemplateContent = FreeMarkerUtil.proccessTemplate(model.getNamespace(),
+                template, map);
+        FileUtils.write(newFile, TemplateContent, "UTF-8");
+    }
 
     public static void main(String[] args) throws IOException {
         File oldPathFile = new File(oldPath);

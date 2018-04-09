@@ -1,4 +1,4 @@
-package com.ysf.csTest.test;
+package com.ysf.csTest.test.base;
 
 import org.junit.After;
 import org.junit.Before;
