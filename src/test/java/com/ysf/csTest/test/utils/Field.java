@@ -3,8 +3,7 @@ package com.ysf.csTest.test.utils;
 /**
  * Created by 972536780 on 2018/3/13.
  */
-
-class Field {
+public class Field {
     private String column;
     private String property;
     private String jdbcType;

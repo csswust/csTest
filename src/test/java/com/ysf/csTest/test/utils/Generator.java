@@ -1,6 +1,8 @@
 package com.ysf.csTest.test.utils;
 
 import com.alibaba.fastjson.JSON;
+import com.ysf.csTest.utils.FileUtil;
+import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -10,12 +12,36 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 972536780 on 2018/4/9.
  */
 public class Generator {
+    public static String modelPath = "E:\\javawork\\csTest\\src\\main\\resources\\mybatis_mappers";
+    public static String daoPath = "E:\\javawork\\csTest\\src\\main\\java\\com\\ysf\\csTest\\dao";
+
+    public static String daoImplPath = daoPath + "/impl";
+    public static String xmlImplPath = modelPath + "/impl";
+    public static String xmlCustomPath = modelPath + "/custom";
+    public static String basePackage = "com.ysf.csTest";
+
+    public static void main(String[] args) throws IOException {
+        File oldPathFile = new File(modelPath);
+        File[] files = oldPathFile.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                continue;
+            }
+            Model model = Generator.getModel(file);
+            System.out.println(JSON.toJSONString(model));
+            DaoImplGenerator.generator(model);
+            MapperImplGenerator.generator(model);
+        }
+    }
+
     public static Model getModel(String xmlPath) {
         File xmlFile = new File(xmlPath);
         return getModel(xmlFile);
@@ -28,7 +54,37 @@ public class Generator {
         return model;
     }
 
-    public static Model getModel(Element rootElement) {
+    public static Map<String, Object> getTemplateMap(Model model) {
+        String typeName = model.getTypeClass().getSimpleName();
+        Map<String, Object> map = new HashMap<>();
+        map.put("basePackage", basePackage);
+        map.put("typeName", typeName);
+        map.put("model", model);
+        map.put("isBlob", model.isBlob() ? 1 : 0);
+        return map;
+    }
+
+    public static void writeTemplate(String writePath, String TemplatePath, Map<String, Object> map) {
+        File newFile = new File(writePath);
+        if (newFile.exists()) return;
+        writeTemplate(newFile, TemplatePath, map);
+    }
+
+    public static void writeTemplate(File writeFile, String TemplatePath, Map<String, Object> map) {
+        String template = FileUtil.readResource(TemplatePath);
+        if (template == null) return;
+        String TemplateContent = FreeMarkerUtil.proccessTemplate(map.toString(),
+                template, map);
+        if (TemplateContent == null) return;
+        try {
+            if (!writeFile.exists()) writeFile.createNewFile();
+            FileUtils.write(writeFile, TemplateContent, "UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Model getModel(Element rootElement) {
         Model model = new Model();
         model.setNamespace(rootElement.attributeValue("namespace"));
         List<Element> resultMapList = rootElement.elements("resultMap");
@@ -60,7 +116,7 @@ public class Generator {
         return model;
     }
 
-    public static List<Field> getField(Element rootElement) {
+    private static List<Field> getField(Element rootElement) {
         List<Field> fieldList = new ArrayList<>();
         List<Element> elementList = rootElement.elements("result");
         for (Element element : elementList) {
@@ -73,7 +129,7 @@ public class Generator {
         return fieldList;
     }
 
-    public static Element readXml(String filePath) {
+    private static Element readXml(String filePath) {
         InputStream in = null;
         Element rootElement = null;
         try {

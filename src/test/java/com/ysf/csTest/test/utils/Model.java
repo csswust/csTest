@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by 972536780 on 2018/4/9.
  */
-class Model {
+public class Model {
     private String namespace;
     private String tableName;
     private String type;
