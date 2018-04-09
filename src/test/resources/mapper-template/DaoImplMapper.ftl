@@ -17,7 +17,7 @@ public class ${typeName}DaoImpl extends CommonMapper<${typeName}, BaseQuery> imp
 
     @Override
     public void insertInit(${typeName} record, Date date) {
-        record.setId(null);
+        record.set${dIdProperty}(null);
         record.setCreateTime(date);
         record.setModifyTime(date);
     }

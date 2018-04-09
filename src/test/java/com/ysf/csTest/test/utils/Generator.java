@@ -22,11 +22,13 @@ import java.util.Map;
 public class Generator {
     public static String modelPath = "E:\\javawork\\csTest\\src\\main\\resources\\mybatis_mappers";
     public static String daoPath = "E:\\javawork\\csTest\\src\\main\\java\\com\\ysf\\csTest\\dao";
+    public static String actionPath = "E:\\javawork\\csTest\\src\\main\\java\\com\\ysf\\csTest\\controller";
 
     public static String daoImplPath = daoPath + "/impl";
     public static String xmlImplPath = modelPath + "/impl";
     public static String xmlCustomPath = modelPath + "/custom";
     public static String basePackage = "com.ysf.csTest";
+    private static boolean isOver = false;
 
     public static void main(String[] args) throws IOException {
         File oldPathFile = new File(modelPath);
@@ -39,6 +41,7 @@ public class Generator {
             System.out.println(JSON.toJSONString(model));
             DaoImplGenerator.generator(model);
             MapperImplGenerator.generator(model);
+            ActionGenerator.generator(model);
         }
     }
 
@@ -66,7 +69,10 @@ public class Generator {
 
     public static void writeTemplate(String writePath, String TemplatePath, Map<String, Object> map) {
         File newFile = new File(writePath);
-        if (newFile.exists()) return;
+        if (newFile.exists()) {
+            if (isOver) newFile.delete();
+            else return;
+        }
         writeTemplate(newFile, TemplatePath, map);
     }
 

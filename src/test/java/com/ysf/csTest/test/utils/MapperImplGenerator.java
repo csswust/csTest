@@ -25,6 +25,13 @@ public class MapperImplGenerator {
             if (i != 0) str += ", ";
             str += fieldList.get(i).getColumn();
         }
+        if(model.isBlob()){
+            List<Field> BlobFieldList = model.getBlobFieldList();
+            for (int i = 0; i < BlobFieldList.size(); i++) {
+                str += ", ";
+                str += BlobFieldList.get(i).getColumn();
+            }
+        }
         return str;
     }
 
@@ -34,6 +41,13 @@ public class MapperImplGenerator {
         for (int i = 0; i < fieldList.size(); i++) {
             if (i != 0) str += ", ";
             str += "#{item." + fieldList.get(i).getProperty() + "}";
+        }
+        if(model.isBlob()){
+            List<Field> BlobFieldList = model.getBlobFieldList();
+            for (int i = 0; i < BlobFieldList.size(); i++) {
+                str += ", ";
+                str += "#{item." + BlobFieldList.get(i).getProperty() + "}";
+            }
         }
         return str;
     }
